@@ -7,41 +7,34 @@ from bson import ObjectId
 from bson import DBRef
 from mongoengine import *
 from ..model.models import *
-from ..util.utils import CPFUtil, DateUtil
+from ..util.utils import *
 from datetime import datetime
 from dateutil.parser import parse
 
-connection = connect('faggion')
-
-@post('/centro-custos')
+@post('/category')
 def new():
 	try:
 		# load data from post
-		post_data = json.loads(request.body.getvalue().decode('utf-8'))
+		post_data = jsonpickle.decode(request.body.read().decode('utf-8'))
 
-		item = CentroCustos()
-
-		item.codigo 	 = post_data['codigo'] if 'codigo' in post_data else None
-		item.descricao = post_data['descricao']
-
+		item = Category()
+		item.name = post_data['name']
 		item.save()
 
-		response.headers['Content-Type'] = 'application/json'
 		response.status = 201
 	except Exception as e:
 		response.status = 500
 		return 'Error ocurred: {msg} on {line}'.format(msg=str(e), line=sys.exc_info()[-1].tb_lineno)
 
-@put('/centro-custos')
-def update():
+@put('/category/<id:re:[0-9a-f]{24}>')
+def update(id):
 	try:
-		request_data = json.loads(request.body.getvalue().decode('utf-8'))
+		# load data from post
+		request_data = jsonpickle.decode(request.body.read().decode('utf-8'))
 
-		item = CentroCustos.objects(id=request_data['id'])
-
+		item = Category.objects(id=id)
 		item.update_one(
-			codigo 		= request_data['codigo'] if 'codigo' in request_data else None,
-			descricao 	= request_data['descricao']
+			name = request_data['name']
 		)
 
 		response.status = 200
@@ -49,28 +42,24 @@ def update():
 		response.status = 500
 		return 'Error ocurred: {msg} on {line}'.format(msg=str(e), line=sys.exc_info()[-1].tb_lineno)
 
-@get('/centros-custos')
+@get('/categories')
 def get_all():
 	try:
 		response.headers['Content-Type'] = 'application/json'
-		return CentroCustos.objects().filter().to_json()
+		return Category.objects().filter().to_json()
 	except DoesNotExist as e:
 		response.status = 404
 		return 'Nenhum registro encontrado'
 
-@get('/centro-custos/<id:re:[0-9a-f]{24}>')
-def get_by_id(id):
-	try:
-		response.headers['Content-Type'] = 'application/json'
-		return CentroCustos.objects(id=id).get().to_json()
-	except DoesNotExist as e:
-		response.status = 404
-		return 'Nenhum registro encontrado'
-
-@delete('/centro-custos/<id:re:[0-9a-f]{24}>')
+@delete('/category/<id:re:[0-9a-f]{24}>')
 def delete(id):
 	try:
-		CentroCustos.objects(id=id).get().delete()
+		# get specified record from database
+		item = Category.objects(id=id).get()
+
+		# remove record from database
+		item.delete()
+		
 		response.status = 200
 		return 'Registro excluido com sucesso!'
 	except Exception as e:

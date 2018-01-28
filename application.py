@@ -1,6 +1,7 @@
 import bottle
 from bottle import get, error, static_file
-from controller.business import apolice, centro_custo, pessoa, usuario, lancamento_financeiro, report, tarefa, etiqueta
+from controller.business import banner, project, category
+from mongoengine import *
 
 app = application = bottle.default_app()
 
@@ -9,6 +10,8 @@ from bottle import hook, route, response
 _allowed_origin  = '*'
 _allowed_methods = 'PUT, GET, POST, DELETE, OPTIONS'
 _allowed_headers = 'Authorization, Origin, Accept, Content-Type, X-Requested-With'
+
+connection = connect('idea10')
 
 @hook('after_request')
 def enable_cors():
