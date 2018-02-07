@@ -111,7 +111,7 @@ def new():
 		
 		# fill category selected field
 		budget.category = CategorySelected()
-		budget.category.name = post_data['category']['name']
+		budget.category.name = post_data['category']['name'] if 'name' in post_data['category']
 
 		# fill image selected field
 		budget.image = ImageSelected()
