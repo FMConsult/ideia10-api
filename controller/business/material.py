@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import re, json, hashlib, base64, os, sys, csv, re, jsonpickle, time
 from bottle import request, response
 from bottle import get, put, post, delete
@@ -12,34 +11,16 @@ from ..util.utils import *
 from datetime import datetime
 from dateutil.parser import parse
 
-@post('/banner')
+@post('/material')
 def new():
 	try:
 		# load data from post
 		post_data = jsonpickle.decode(request.body.read().decode('utf-8'))
 
-		item = Banner()
+		item = Material()
 		item.name = post_data['name']
-		
-		attchament = Attachment()
-		attchament.file_name = post_data['attchament']['name']
-		attchament.file_size = post_data['attchament']['size']
-		attchament.file_type = post_data['attchament']['type']
-
-		# replaces the multipart file information
-		post_data['attchament']['path'] = post_data['attchament']['path'][(post_data['attchament']['path'].find('base64,')+7) : len(post_data['attchament']['path'])]
-		# generate file name
-		file_path = 'anexos/'+ str(ObjectId()) +'.'+ post_data['attchament']['type']
-		# create file point
-		file = open(file_path, 'wb')
-		# write data in file
-		file.write(base64.decodestring(post_data['attchament']['path']))
-		# closes file
-		file.close()
-		
-		attchament.file_path = file_path
-
-		item.file = attchament
+		item.cost = float(post_data['cost'])
+		item.thumbnail = post_data['thumbnail']
 		item.save()
 
 		response.status = 201
@@ -47,26 +28,41 @@ def new():
 		response.status = 500
 		return 'Error ocurred: {msg} on {line}'.format(msg=str(e), line=sys.exc_info()[-1].tb_lineno)
 
-@get('/banners')
+@put('/material/<id:re:[0-9a-f]{24}>')
+def update(id):
+	try:
+		# load data from post
+		request_data = jsonpickle.decode(request.body.read().decode('utf-8'))
+
+		item = Material.objects(id=id)
+		item.update_one(
+			name = request_data['name'],
+			cost = float(request_data['cost']),
+			thumbnail = request_data['thumbnail']
+		)
+
+		response.status = 200
+	except Exception as e:
+		response.status = 500
+		return 'Error ocurred: {msg} on {line}'.format(msg=str(e), line=sys.exc_info()[-1].tb_lineno)
+
+@get('/materials')
 def get_all():
 	try:
 		response.headers['Content-Type'] = 'application/json'
-		return Banner.objects().filter().to_json()
+		return Material.objects().filter().to_json()
 	except DoesNotExist as e:
 		response.status = 404
 		return 'Nenhum registro encontrado'
 
-@delete('/banner/<id:re:[0-9a-f]{24}>')
+@delete('/material/<id:re:[0-9a-f]{24}>')
 def delete(id):
 	try:
 		# get specified record from database
-		banner = Banner.objects(id=id).get()
-
-		# remove the file from the FileSystem
-		os.remove(banner.file.file_path)
+		item = Material.objects(id=id).get()
 
 		# remove record from database
-		banner.delete()
+		item.delete()
 		
 		response.status = 200
 		return 'Registro excluido com sucesso!'
