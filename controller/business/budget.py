@@ -25,7 +25,7 @@ def send_budget_email_customer(budget_id):
 
 	email_text = 'Agradecemos o seu pedido e ficamos a disposicao para esclarecer qualquer duvida que voce tenha a respeito dos nossos produtos e servico.<br><br>'
 	email_text = email_text + 'Abaixo seguem os dados do seu pedido de orcamento realizado pelo nosso site:<br><br>'
-	email_text = email_text + '<strong>Imagem escolhida:</strong> #'+ budget.image.code + ' <a href="http://localhost/~filipecoelho/idea10-site/'+ budget.image.path +'">Clique aqui para visualizar a imagem</a><br>'
+	email_text = email_text + '<strong>Imagem escolhida:</strong> #'+ budget.image.code + ' <a href="http://201.27.1.220:7070/idea10-site/'+ budget.image.path +'">Clique aqui para visualizar a imagem</a><br>'
 	email_text = email_text + '<strong>Material de Aplicacao:</strong> '+ budget.material.info.name + '<br>'
 	email_text = email_text + '<strong>Tamanho do Material:</strong> '+ str(round(budget.material.dimensions.height, 2)) + 'm x '+ str(round(budget.material.dimensions.width, 2)) + 'm<br>'
 	email_text = email_text + '<strong>Area de Impressao:</strong> '+ str(round(budget.local.dimensions.height, 2)) + 'm x '+ str(round(budget.local.dimensions.width, 2)) + 'm<br>'
@@ -54,7 +54,7 @@ def send_budget_email_company(budget_id):
 	)
 
 	email_text = 'Abaixo seguem os dados do pedido de orcamento realizado pelo site:<br><br>'
-	email_text = email_text + '<strong>Imagem escolhida:</strong> #'+ budget.image.code + ' <a href="http://localhost/~filipecoelho/idea10-site/'+ budget.image.path +'">Clique aqui para visualizar a imagem</a><br>'
+	email_text = email_text + '<strong>Imagem escolhida:</strong> #'+ budget.image.code + ' <a href="http://201.27.1.220:7070/idea10-site/'+ budget.image.path +'">Clique aqui para visualizar a imagem</a><br>'
 	email_text = email_text + '<strong>Material de Aplicacao:</strong> '+ budget.material.info.name + '<br>'
 	email_text = email_text + '<strong>Tamanho do Material:</strong> '+ str(round(budget.material.dimensions.height, 2)) + 'm x '+ str(round(budget.material.dimensions.width, 2)) + 'm<br>'
 	email_text = email_text + '<strong>Area de Impressao:</strong> '+ str(round(budget.local.dimensions.height, 2)) + 'm x '+ str(round(budget.local.dimensions.width, 2)) + 'm<br>'
