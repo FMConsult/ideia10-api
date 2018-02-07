@@ -82,7 +82,7 @@ def send_budget_email_company(budget_id):
 	if not (budget.customer.address is None):
 		email_text = email_text + '<strong>Endereco:</strong> '+ budget.customer.address + '<br>'
 
-	if not (budget.customer.number) is None):
+	if not (budget.customer.number is None):
 		email_text = email_text + '<strong>Numero:</strong> '+ str(budget.customer.number) + '<br>'
 
 	if not (budget.customer.district is None):
