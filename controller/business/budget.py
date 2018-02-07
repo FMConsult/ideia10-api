@@ -64,17 +64,38 @@ def send_budget_email_company(budget_id):
 	email_text = email_text + '<strong>Valor da Impressao:</strong> R$ '+ str(round(budget.print_value, 2)) + '<br><br>'
 
 	email_text = email_text + '<h3>Dados do cliente</h3>'
-	email_text = email_text + '<strong>Nome:</strong> '+ budget.customer.name + '<br>'
-	email_text = email_text + '<strong>Telefone:</strong> '+ budget.customer.default_phone + '<br>'
-	email_text = email_text + '<strong>Celular:</strong> '+ budget.customer.mobile_phone + '<br>'
-	email_text = email_text + '<strong>E-mail:</strong> '+ budget.customer.email + '<br>'
-	email_text = email_text + '<strong>CEP:</strong> '+ budget.customer.postal_code + '<br>'
-	email_text = email_text + '<strong>Endereco:</strong> '+ budget.customer.address + '<br>'
-	email_text = email_text + '<strong>Numero:</strong> '+ str(budget.customer.number) + '<br>'
-	email_text = email_text + '<strong>Bairro:</strong> '+ budget.customer.district + '<br>'
-	email_text = email_text + '<strong>Cidade:</strong> '+ budget.customer.city + '<br>'
-	email_text = email_text + '<strong>Estado:</strong> '+ budget.customer.state + '<br>'
-	email_text = email_text + '<strong>Observacoes:</strong> '+ budget.customer.comments
+	if not (budget.customer.name is None):
+		email_text = email_text + '<strong>Nome:</strong> '+ budget.customer.name + '<br>'
+
+	if not (budget.customer.default_phone is None):
+		email_text = email_text + '<strong>Telefone:</strong> '+ budget.customer.default_phone + '<br>'
+
+	if not (budget.customer.mobile_phone is None):
+		email_text = email_text + '<strong>Celular:</strong> '+ budget.customer.mobile_phone + '<br>'
+
+	if not (budget.customer.email is None):
+		email_text = email_text + '<strong>E-mail:</strong> '+ budget.customer.email + '<br>'
+
+	if not (budget.customer.postal_code is None):
+		email_text = email_text + '<strong>CEP:</strong> '+ budget.customer.postal_code + '<br>'
+
+	if not (budget.customer.address is None):
+		email_text = email_text + '<strong>Endereco:</strong> '+ budget.customer.address + '<br>'
+
+	if not (budget.customer.number) is None):
+		email_text = email_text + '<strong>Numero:</strong> '+ str(budget.customer.number) + '<br>'
+
+	if not (budget.customer.district is None):
+		email_text = email_text + '<strong>Bairro:</strong> '+ budget.customer.district + '<br>'
+
+	if not (budget.customer.city is None):
+		email_text = email_text + '<strong>Cidade:</strong> '+ budget.customer.city + '<br>'
+
+	if not (budget.customer.state is None):
+		email_text = email_text + '<strong>Estado:</strong> '+ budget.customer.state + '<br>'
+
+	if not(budget.customer.comments is None):
+		email_text = email_text + '<strong>Observacoes:</strong> '+ budget.customer.comments
 
 	ms.connect()
 	ms.send_mail(
