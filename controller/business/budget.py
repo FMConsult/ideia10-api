@@ -79,7 +79,7 @@ def send_budget_email_company(budget_id):
 	ms.connect()
 	ms.send_mail(
 		subject 	= 'Idea10 | Novo pedido de orçamento pelo site!',
-		destination = ['filipe.coelho@webliniaerp.com.br'],
+		destination = ['israel.barbosa@positecnologia.com.br','filipe.coelho@webliniaerp.com.br'],
 		text 		= email_text,
 		text_type 	= 'html'
 	)
@@ -122,16 +122,16 @@ def new():
 		# fill customer field
 		budget.customer = CustomerInformation()
 		budget.customer.name = post_data['customer']['name']
-		budget.customer.default_phone = post_data['customer']['default_phone']
-		budget.customer.mobile_phone = post_data['customer']['mobile_phone']
-		budget.customer.email = post_data['customer']['email']
-		budget.customer.postal_code = post_data['customer']['postal_code']
-		budget.customer.address = post_data['customer']['address']
-		budget.customer.number = post_data['customer']['number']
-		budget.customer.district = post_data['customer']['district']
-		budget.customer.city = post_data['customer']['city']
-		budget.customer.state = post_data['customer']['state']
-		budget.customer.comments = post_data['customer']['comments']
+		budget.customer.default_phone = post_data['customer']['default_phone'] if 'default_phone' in post_data['customer'] else None
+		budget.customer.mobile_phone = post_data['customer']['mobile_phone'] if 'mobile_phone' in post_data['customer'] else None
+		budget.customer.email = post_data['customer']['email'] if 'email' in post_data['customer'] else None
+		budget.customer.postal_code = post_data['customer']['postal_code'] if 'postal_code' in post_data['customer'] else None
+		budget.customer.address = post_data['customer']['address'] if 'address' in post_data['customer'] else None
+		budget.customer.number = post_data['customer']['number'] if 'number' in post_data['customer'] else None
+		budget.customer.district = post_data['customer']['district'] if 'district' in post_data['customer'] else None
+		budget.customer.city = post_data['customer']['city'] if 'city' in post_data['customer'] else None
+		budget.customer.state = post_data['customer']['state'] if 'state' in post_data['customer'] else None
+		budget.customer.comments = post_data['customer']['comments'] if 'comments' in post_data['customer'] else None
 
 		# fill other relevant fields
 		budget.print_value = float(post_data['print_value'])
