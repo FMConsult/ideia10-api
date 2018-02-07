@@ -110,7 +110,7 @@ def new():
 		budget.local.dimensions.total = float(post_data['local']['dimensions']['total']);
 		
 		# fill category selected field
-		if 'category' in post_data:
+		if ('category' in post_data) and ('name' in post_data['category']):
 			budget.category = CategorySelected()
 			budget.category.name = post_data['category']['name'] if 'name' in post_data['category'] else None
 
