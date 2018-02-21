@@ -5,9 +5,11 @@ from bottle import get, put, post, delete
 
 @get('/external/instagram/feed')
 def get_instagram_feed():
-	api = InstagramAPI("Idea10oficial", "print102030")
+	# api = InstagramAPI("Idea10oficial", "print102030")
+	api = InstagramAPI("idea10tambore", "Print102030")
 	if (api.login()):
 		api.getSelfUserFeed()
 		return api.LastJson
 	else:
-		return "Can't login!"
+		response.status = 500
+		return "Não foi possível efetuar o login, usuário e/ou senha inválidos."
