@@ -12,6 +12,38 @@ from ..util.utils import *
 from datetime import datetime
 from dateutil.parser import parse
 
+@post('/contact/send/email')
+def send_contact_email():
+	contact_info = jsonpickle.decode(request.body.read().decode('utf-8'))
+
+	ms = MailSender(
+		host='srvwl1.virtuaserver.com.br',
+		port='465',
+		user='filipe.coelho@webliniaerp.com.br',
+		password='f150679@Fil'
+	)
+
+	email_text = 'Abaixo seguem os dados do contato realizado pelo site:<br><br>'
+	
+	if 'full_name' in contact_info:
+		email_text = email_text + '<strong>Nome Completo:</strong> '+ contact_info['full_name'] + '<br>'
+	if 'phone_number' in contact_info:
+		email_text = email_text + '<strong>Telefone:</strong> '+ contact_info['phone_number'] + '<br>'
+	if 'email' in contact_info:
+		email_text = email_text + '<strong>E-mail:</strong> '+ contact_info['email'] + '<br>'
+	if 'text_description' in contact_info:
+		email_text = email_text + unicode('<strong>Observações:</strong> ','utf-8')+ contact_info['text_description']
+
+	ms.connect()
+	ms.send_mail(
+		subject 	= 'Idea10 | Contato pelo site!',
+		destination = ['filipe.mendonca.coelho@gmail.com'],
+		text 		= email_text,
+		text_type 	= 'html'
+	)
+
+	return 'Agradecemos o seu contato e em breve entraremos em contato.'
+
 @get('/budget/<budget_id:re:[0-9a-f]{24}>/send/email/customer')
 def send_budget_email_customer(budget_id):
 	budget = Budget.objects(id = budget_id).get()
@@ -100,7 +132,7 @@ def send_budget_email_company(budget_id):
 	ms.connect()
 	ms.send_mail(
 		subject 	= 'Idea10 | Novo pedido de orçamento pelo site!',
-		destination = ['israel.barbosa@positecnologia.com.br','filipe.coelho@webliniaerp.com.br'],
+		destination = ['filipe.coelho@webliniaerp.com.br'],
 		text 		= email_text,
 		text_type 	= 'html'
 	)

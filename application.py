@@ -1,6 +1,6 @@
 import bottle
 from bottle import get, error, static_file
-from controller.business import banner, project, category, budget, material, external
+from controller.business import banner, project, category, budget, material, external, user
 from mongoengine import *
 
 app = application = bottle.default_app()
@@ -29,7 +29,7 @@ def options_handler(path = None):
 def anexos(filename):
     return static_file(filename, root='anexos')
 
-@get('/images/<filename:re:.*\.(jpg|png)>')
+@get('/images/<filename:re:.*\.(jpeg|jpg|png)>')
 def images(filename):
     return static_file(filename, root='images')
 

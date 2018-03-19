@@ -18,6 +18,23 @@ class Attachment(EmbeddedDocument):
 	description = StringField()
 	uploaded_at = DateTimeField(default=datetime.datetime.now)
 
+class User(Document):
+	# Collection configuration
+	meta = {'collection': 'users', 'queryset_class': CustomQuerySet}
+	
+	# Collection fields
+	name = StringField()
+	login = StringField()
+	password = StringField()
+
+	def to_json(self):
+		data = self.to_mongo()
+		del data['password']
+		data["id"] = str(self.id)
+		del data['_id']
+
+		return json_util.dumps(data)
+
 class Banner(Document):
 	# Collection configuration
 	meta = {'collection': 'banners', 'queryset_class': CustomQuerySet}
@@ -100,6 +117,10 @@ class LocalInformation(EmbeddedDocument):
 	oid 		= ObjectIdField(required=True, default=ObjectId)
 	dimensions 	= EmbeddedDocumentField(DimensionData)
 
+class InstalationInformation(EmbeddedDocument):
+	oid 		= ObjectIdField(required=True, default=ObjectId)
+	dimensions 	= EmbeddedDocumentField(DimensionData)
+
 class CategorySelected(EmbeddedDocument):
 	oid  = ObjectIdField(required=True, default=ObjectId)
 	name = StringField()
@@ -131,6 +152,7 @@ class Budget(Document):
 	# Collection fields
 	material 			= EmbeddedDocumentField(MaterialSelected)
 	local 				= EmbeddedDocumentField(LocalInformation)
+	instalation			= EmbeddedDocumentField(InstalationInformation)
 	category 			= EmbeddedDocumentField(CategorySelected)
 	image 				= EmbeddedDocumentField(ImageSelected)
 	customer 			= EmbeddedDocumentField(CustomerInformation)
@@ -150,6 +172,11 @@ class Budget(Document):
 			data['local'] = self.local.to_mongo()
 			data['local']["id"] = str(self.local.oid)
 			del data['local']['oid']
+
+		if not (self.instalation is None):
+			data['instalation'] = self.instalation.to_mongo()
+			data['instalation']["id"] = str(self.instalation.oid)
+			del data['instalation']['oid']
 
 		if not (self.category is None):
 			data['category'] = self.category.to_mongo()

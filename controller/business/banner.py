@@ -21,25 +21,26 @@ def new():
 		item = Banner()
 		item.name = post_data['name']
 		
-		attchament = Attachment()
-		attchament.file_name = post_data['attchament']['name']
-		attchament.file_size = post_data['attchament']['size']
-		attchament.file_type = post_data['attchament']['type']
+		if 'attachment' in post_data:
+			attachment = Attachment()
+			attachment.file_name = post_data['attachment']['name']
+			attachment.file_size = post_data['attachment']['size']
+			attachment.file_type = post_data['attachment']['type']
 
-		# replaces the multipart file information
-		post_data['attchament']['path'] = post_data['attchament']['path'][(post_data['attchament']['path'].find('base64,')+7) : len(post_data['attchament']['path'])]
-		# generate file name
-		file_path = 'anexos/'+ str(ObjectId()) +'.'+ post_data['attchament']['type']
-		# create file point
-		file = open(file_path, 'wb')
-		# write data in file
-		file.write(base64.decodestring(post_data['attchament']['path']))
-		# closes file
-		file.close()
-		
-		attchament.file_path = file_path
+			# replaces the multipart file information
+			post_data['attachment']['path'] = post_data['attachment']['path'][(post_data['attachment']['path'].find('base64,')+7) : len(post_data['attachment']['path'])]
+			# generate file name
+			file_path = 'images/'+ str(ObjectId()) +'.'+ post_data['attachment']['type']
+			# create file point
+			file = open(file_path, 'wb')
+			# write data in file
+			file.write(base64.decodestring(post_data['attachment']['path']))
+			# closes file
+			file.close()
+			
+			attachment.file_path = file_path
 
-		item.file = attchament
+			item.file = attachment
 		item.save()
 
 		response.status = 201
